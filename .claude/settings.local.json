@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Figma__get_screenshot",
+      "Bash(curl -s -o /tmp/chef-closed.png \"https://www.figma.com/api/mcp/asset/5477cb16-8099-4e04-945f-4670d8ecb8cf\" && curl -s -o /tmp/goofy-closed.png \"https://www.figma.com/api/mcp/asset/ae17e99c-6a82-4834-ae05-64af76c7f3b7\")",
+      "Bash(npm install framer-motion 2>&1)"
+    ]
+  }
+}
