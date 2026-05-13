@@ -134,6 +134,7 @@
   gap: 8.902px;
   padding: 3.71px 5.97px;
   justify-content: center;
+  border-radius: 4px;
 }
 
 /* Player — open: positioned by wrapper */
@@ -143,6 +144,7 @@
   gap: 7.526px;
   padding: 12.377px;
   overflow: hidden;
+  border-radius: 8px;
 }
 
 .player-row-1 {

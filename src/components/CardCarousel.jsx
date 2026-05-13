@@ -4,29 +4,36 @@ import useSoundEffects from '../hooks/useSoundEffects'
 
 const variants = {
   enter: (direction) => ({
-    x: direction > 0 ? 60 : -60,
-    scale: 0.94,
-    opacity: 1,
+    x: direction > 0 ? 80 : -80,
+    scale: 0.92,
+    rotate: direction > 0 ? 2.5 : -2.5,
+    opacity: 0.6,
     zIndex: 0,
   }),
   center: {
     x: 0,
     scale: 1,
+    rotate: 0,
     opacity: 1,
     zIndex: 1,
     transition: {
-      x: { type: 'spring', stiffness: 320, damping: 30 },
-      scale: { type: 'spring', stiffness: 320, damping: 30 },
+      x: { type: 'spring', stiffness: 200, damping: 24, mass: 0.8 },
+      scale: { type: 'spring', stiffness: 200, damping: 22 },
+      rotate: { type: 'spring', stiffness: 200, damping: 20 },
+      opacity: { duration: 0.2, ease: 'easeOut' },
     },
   },
   exit: (direction) => ({
-    x: direction > 0 ? -60 : 60,
-    scale: 0.94,
-    opacity: 1,
+    x: direction > 0 ? -80 : 80,
+    scale: 0.92,
+    rotate: direction > 0 ? -2.5 : 2.5,
+    opacity: 0,
     zIndex: 0,
     transition: {
-      x: { type: 'spring', stiffness: 320, damping: 30 },
-      scale: { duration: 0.22, ease: 'easeIn' },
+      x: { type: 'spring', stiffness: 200, damping: 24, mass: 0.8 },
+      scale: { type: 'spring', stiffness: 200, damping: 22 },
+      rotate: { type: 'spring', stiffness: 200, damping: 20 },
+      opacity: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
     },
   }),
 }

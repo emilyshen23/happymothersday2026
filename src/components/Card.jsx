@@ -21,29 +21,34 @@ export default function Card({ card }) {
   }, [])
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
       className="card"
-      style={{
-        position: 'relative',
-        backgroundColor: card.colors.bg,
-        perspective: 800,
-      }}
-      animate={tilt}
-      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+      style={{ perspective: 900 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <VoicePlayer
-        card={card}
-        isOpen={playerOpen}
-        onOpen={() => setPlayerOpen(true)}
-        onClose={() => setPlayerOpen(false)}
-      />
+      <motion.div
+        style={{
+          position: 'relative',
+          backgroundColor: card.colors.bg,
+          transformStyle: 'preserve-3d',
+          transformOrigin: 'center center',
+        }}
+        animate={tilt}
+        transition={{ type: 'spring', stiffness: 260, damping: 22, mass: 0.6 }}
+      >
+        <VoicePlayer
+          card={card}
+          isOpen={playerOpen}
+          onOpen={() => setPlayerOpen(true)}
+          onClose={() => setPlayerOpen(false)}
+        />
 
-      <div className="card-illustration">
-        <img src={card.illustration} alt={card.title} draggable={false} />
-      </div>
-    </motion.div>
+        <div className="card-illustration">
+          <img src={card.illustration} alt={card.title} draggable={false} />
+        </div>
+      </motion.div>
+    </div>
   )
 }
