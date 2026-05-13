@@ -4,17 +4,12 @@ import NavDots from './components/NavDots'
 import NavArrows from './components/NavArrows'
 import cards from './data/cards'
 import navBarImg from './assets/images/nav-bar.png'
+import backgroundImg from './assets/images/background1.png'
 import './App.css'
 
 function App() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [direction, setDirection] = useState(0)
-
-  const navigate = useCallback((newIndex) => {
-    const dir = newIndex > activeIndex ? 1 : -1
-    setDirection(dir)
-    setActiveIndex(newIndex)
-  }, [activeIndex])
 
   const goNext = useCallback(() => {
     const next = (activeIndex + 1) % cards.length
@@ -30,21 +25,27 @@ function App() {
 
   return (
     <>
-      <img src={navBarImg} className="nav-bar" alt="" draggable={false} />
+      <img src={backgroundImg} className="app-bg" alt="" draggable={false} />
 
-      <NavDots
-        total={cards.length}
-        activeIndex={activeIndex}
-        activeColor={cards[activeIndex].accent}
-      />
+      <div className="phone-frame">
+        <img src={navBarImg} className="nav-bar" alt="" draggable={false} />
 
-      <CardCarousel
-        cards={cards}
-        activeIndex={activeIndex}
-        direction={direction}
-      />
+        <p className="header-text">母亲节快乐!</p>
 
-      <NavArrows onPrev={goPrev} onNext={goNext} />
+        <NavDots
+          total={cards.length}
+          activeIndex={activeIndex}
+          activeColor={cards[activeIndex].accent}
+        />
+
+        <CardCarousel
+          cards={cards}
+          activeIndex={activeIndex}
+          direction={direction}
+        />
+
+        <NavArrows onPrev={goPrev} onNext={goNext} />
+      </div>
     </>
   )
 }

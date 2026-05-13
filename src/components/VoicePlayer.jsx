@@ -30,9 +30,7 @@ function WaveformBars({ count, heights, strongColor, mutedColor, darkCount, isPl
             }}
             animate={
               isPlaying
-                ? {
-                    scaleY: [0.35, 1, 0.35],
-                  }
+                ? { scaleY: [0.35, 1, 0.35] }
                 : { scaleY: 1 }
             }
             transition={
@@ -121,6 +119,7 @@ export default function VoicePlayer({ card, isOpen, onOpen, onClose }) {
           className="player player-open"
           style={{
             border: `1.238px solid ${card.colors.border}`,
+            backgroundColor: card.colors.bg,
           }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -136,8 +135,8 @@ export default function VoicePlayer({ card, isOpen, onOpen, onClose }) {
               mutedColor={card.colors.muted}
               darkCount={DARK_BAR_COUNT}
               isPlaying={isPlaying}
-              barWidth={4.046}
-              gap={4.046}
+              barWidth={3}
+              gap={2.5}
             />
             <span className="player-time" style={{ color: card.colors.strong }}>
               {formatTime(currentTime)}/{formatTime(duration || card.duration)}
