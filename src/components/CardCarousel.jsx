@@ -27,10 +27,10 @@ export default function CardCarousel({ cards, activeIndex, direction, onNext, on
   }
 
   const handleDragEnd = (_, info) => {
-    if (info.offset.x < -80 && onNext) {
+    if (info.offset.x > 80 && onNext) {
       playCardSwipe()
       onNext()
-    } else if (info.offset.x > 80 && onPrev) {
+    } else if (info.offset.x < -80 && onPrev) {
       playCardSwipe()
       onPrev()
     }

@@ -14,15 +14,15 @@ function App() {
   const { playCardSwipe } = useSoundEffects()
 
   const goNext = useCallback(() => {
-    const next = (activeIndex + 1) % cards.length
+    if (activeIndex >= cards.length - 1) return
     setDirection(1)
-    setActiveIndex(next)
+    setActiveIndex(activeIndex + 1)
   }, [activeIndex])
 
   const goPrev = useCallback(() => {
-    const prev = (activeIndex - 1 + cards.length) % cards.length
+    if (activeIndex <= 0) return
     setDirection(-1)
-    setActiveIndex(prev)
+    setActiveIndex(activeIndex - 1)
   }, [activeIndex])
 
   const goNextWithSound = useCallback(() => {
