@@ -121,7 +121,8 @@ export default function VoicePlayer({ card, isOpen, onOpen, onClose }) {
             backgroundColor: card.colors.bg,
             pointerEvents: isOpen ? 'none' : 'auto',
             opacity: isOpen ? 0 : 1,
-            transition: 'opacity 250ms ease',
+            transform: isOpen ? 'scale(0.88)' : 'scale(1)',
+            transition: 'opacity 200ms ease, transform 300ms cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
           <ClosedWaveform
@@ -166,11 +167,15 @@ export default function VoicePlayer({ card, isOpen, onOpen, onClose }) {
                 border: `1.238px solid ${card.colors.border}`,
                 backgroundColor: card.colors.bg,
                 pointerEvents: 'auto',
+                transformOrigin: 'top center',
               }}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 4 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
+              initial={{ opacity: 0, scale: 0.88, y: -4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: -2 }}
+              transition={{
+                default: { type: 'spring', stiffness: 340, damping: 26, mass: 0.8 },
+                opacity: { duration: 0.2, ease: 'easeOut' },
+              }}
             >
               <div className="player-row-1" onClick={(e) => e.stopPropagation()}>
                 <OpenWaveform
