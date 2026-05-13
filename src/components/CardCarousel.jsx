@@ -1,48 +1,32 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Card from './Card'
 import useSoundEffects from '../hooks/useSoundEffects'
 
-const variants = {
-  enter: (direction) => ({
-    x: direction > 0 ? 80 : -80,
-    scale: 0.92,
-    rotate: direction > 0 ? 2.5 : -2.5,
-    opacity: 0.6,
-    zIndex: 0,
-  }),
-  center: {
-    x: 0,
-    scale: 1,
-    rotate: 0,
-    opacity: 1,
-    zIndex: 1,
-    transition: {
-      x: { type: 'spring', stiffness: 200, damping: 24, mass: 0.8 },
-      scale: { type: 'spring', stiffness: 200, damping: 22 },
-      rotate: { type: 'spring', stiffness: 200, damping: 20 },
-      opacity: { duration: 0.2, ease: 'easeOut' },
-    },
-  },
-  exit: (direction) => ({
-    x: direction > 0 ? -80 : 80,
-    scale: 0.92,
-    rotate: direction > 0 ? -2.5 : 2.5,
-    opacity: 0,
-    zIndex: 0,
-    transition: {
-      x: { type: 'spring', stiffness: 200, damping: 24, mass: 0.8 },
-      scale: { type: 'spring', stiffness: 200, damping: 22 },
-      rotate: { type: 'spring', stiffness: 200, damping: 20 },
-      opacity: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
-    },
-  }),
+const FRONT = { x: 0, y: 0, scale: 1, rotate: 0 }
+
+const spring = {
+  type: 'spring',
+  stiffness: 200,
+  damping: 24,
+  mass: 0.8,
 }
 
 export default function CardCarousel({ cards, activeIndex, direction, onNext, onPrev }) {
-  const card = cards[activeIndex]
   const { playCardSwipe } = useSoundEffects()
 
-  const handleDragEnd = (e, info) => {
+  // Slot A is front on even indices, slot B on odd — toggles every navigation
+  const aIsFront = activeIndex % 2 === 0
+  const frontCard = cards[activeIndex]
+  const backCard = activeIndex < cards.length - 1 ? cards[activeIndex + 1] : null
+
+  const backTarget = {
+    x: 0,
+    y: 0,
+    scale: 1,
+    rotate: direction >= 0 ? 4 : -4,
+  }
+
+  const handleDragEnd = (_, info) => {
     if (info.offset.x < -80 && onNext) {
       playCardSwipe()
       onNext()
@@ -52,32 +36,41 @@ export default function CardCarousel({ cards, activeIndex, direction, onNext, on
     }
   }
 
+  const slots = [
+    { key: 'slot-a', isFront: aIsFront, card: aIsFront ? frontCard : backCard },
+    { key: 'slot-b', isFront: !aIsFront, card: !aIsFront ? frontCard : backCard },
+  ]
+
   return (
     <div className="carousel">
-      {/* Invisible sizer to give the carousel its natural height */}
       <div className="carousel-sizer">
-        <Card card={card} />
+        <Card card={frontCard} />
       </div>
 
-      <AnimatePresence mode="sync" custom={direction} initial={false}>
+      {slots.map(({ key, isFront, card }) => (
         <motion.div
-          key={card.id}
+          key={key}
           className="carousel-slide"
-          custom={direction}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.4}
-          onDragEnd={handleDragEnd}
-          style={{ cursor: 'grab' }}
-          whileDrag={{ cursor: 'grabbing' }}
+          animate={{
+            ...(isFront ? FRONT : backTarget),
+            opacity: card ? 1 : 0,
+          }}
+          transition={spring}
+          style={{
+            zIndex: isFront ? 2 : 1,
+            pointerEvents: isFront ? 'auto' : 'none',
+            cursor: isFront ? 'grab' : 'default',
+            transformOrigin: 'center center',
+          }}
+          drag={isFront ? 'x' : false}
+          dragConstraints={isFront ? { left: 0, right: 0 } : undefined}
+          dragElastic={isFront ? 0.4 : undefined}
+          onDragEnd={isFront ? handleDragEnd : undefined}
+          whileDrag={isFront ? { cursor: 'grabbing' } : undefined}
         >
-          <Card card={card} />
+          {card && <Card key={`${card.id}-${activeIndex}`} card={card} />}
         </motion.div>
-      </AnimatePresence>
+      ))}
     </div>
   )
 }
