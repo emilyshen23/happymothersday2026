@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-export default function useAudio(src) {
+export default function useAudio(src, onEnded) {
   const audioRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const rafRef = useRef(null)
+  const onEndedRef = useRef(onEnded)
+  onEndedRef.current = onEnded
 
   useEffect(() => {
     const audio = new Audio(src)
@@ -19,6 +21,7 @@ export default function useAudio(src) {
       setIsPlaying(false)
       setCurrentTime(0)
       cancelAnimationFrame(rafRef.current)
+      if (onEndedRef.current) onEndedRef.current()
     })
 
     return () => {

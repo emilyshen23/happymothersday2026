@@ -5,11 +5,13 @@ import NavArrows from './components/NavArrows'
 import cards from './data/cards'
 import navBarImg from './assets/images/nav-bar.png'
 import backgroundImg from './assets/images/background1.png'
+import useSoundEffects from './hooks/useSoundEffects'
 import './App.css'
 
 function App() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [direction, setDirection] = useState(0)
+  const { playCardSwipe } = useSoundEffects()
 
   const goNext = useCallback(() => {
     const next = (activeIndex + 1) % cards.length
@@ -23,6 +25,16 @@ function App() {
     setActiveIndex(prev)
   }, [activeIndex])
 
+  const goNextWithSound = useCallback(() => {
+    playCardSwipe()
+    goNext()
+  }, [playCardSwipe, goNext])
+
+  const goPrevWithSound = useCallback(() => {
+    playCardSwipe()
+    goPrev()
+  }, [playCardSwipe, goPrev])
+
   return (
     <>
       <img src={backgroundImg} className="app-bg" alt="" draggable={false} />
@@ -31,20 +43,22 @@ function App() {
         <img src={navBarImg} className="nav-bar" alt="" draggable={false} />
 
         <p className="header-text">母亲节快乐!</p>
+        <div style={{ width: '100%', height: '1px', backgroundColor: 'rgba(86,55,25,0.2)', flexShrink: 0 }} />
 
         <NavDots
           total={cards.length}
           activeIndex={activeIndex}
-          activeColor={cards[activeIndex].accent}
         />
 
         <CardCarousel
           cards={cards}
           activeIndex={activeIndex}
           direction={direction}
+          onNext={goNextWithSound}
+          onPrev={goPrevWithSound}
         />
 
-        <NavArrows onPrev={goPrev} onNext={goNext} />
+        <NavArrows onPrev={goPrevWithSound} onNext={goNextWithSound} />
       </div>
     </>
   )
